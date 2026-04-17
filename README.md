@@ -213,11 +213,6 @@ http://localhost:8000/docs
 
 ---
 
-## 💬 Interview Explanation
-
-Built a production-style LLM guardrail system combining rule-based detection with a trained ML classifier. The system dynamically evaluates prompt risk and tracks session behavior to enforce adaptive safety policies. Deployed using FastAPI and Docker.
-
----
 
 ## 📌 Author
 
