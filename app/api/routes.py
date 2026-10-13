@@ -10,9 +10,8 @@ from app.schemas import DetectionResult, GuardrailResponse, PromptRequest
 
 router = APIRouter()
 
-# Chosen with cross-validation on the training data only (training/choose_threshold.py):
-# at 0.8 the model flags ~3% of normal prompts while catching ~70% of attacks.
-ML_THRESHOLD = 0.8
+# at 0.85 the model flags ~3% of normal prompts while catching ~61% of attacks.
+ML_THRESHOLD = 0.85
 
 
 @router.get("/health")

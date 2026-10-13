@@ -9,7 +9,13 @@ from sklearn.pipeline import make_pipeline
 
 train = pd.read_csv("training/data/train.csv")
 
-vectorizer = TfidfVectorizer(ngram_range=(1, 2), sublinear_tf=True, min_df=2)
+from sklearn.pipeline import FeatureUnion
+
+# Word features (meaning) + character features (robust to typos, leetspeak, other languages).
+vectorizer = FeatureUnion([
+    ("words", TfidfVectorizer(ngram_range=(1, 2), sublinear_tf=True, min_df=2)),
+    ("chars", TfidfVectorizer(analyzer="char_wb", ngram_range=(3, 5), sublinear_tf=True, min_df=2)),
+])
 model = LogisticRegression(class_weight="balanced", max_iter=2000, C=4.0)
 
 # 5-fold cross-validation on the TRAINING data only, a sanity check before the real test.

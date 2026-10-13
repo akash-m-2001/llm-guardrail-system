@@ -10,8 +10,14 @@ from sklearn.model_selection import StratifiedKFold, cross_val_predict
 from sklearn.pipeline import make_pipeline
 
 train = pd.read_csv("training/data/train.csv")
+from sklearn.pipeline import FeatureUnion
+
+# Must match training/train.py exactly, or the threshold is chosen for a different model.
 pipeline = make_pipeline(
-    TfidfVectorizer(ngram_range=(1, 2), sublinear_tf=True, min_df=2),
+    FeatureUnion([
+        ("words", TfidfVectorizer(ngram_range=(1, 2), sublinear_tf=True, min_df=2)),
+        ("chars", TfidfVectorizer(analyzer="char_wb", ngram_range=(3, 5), sublinear_tf=True, min_df=2)),
+    ]),
     LogisticRegression(class_weight="balanced", max_iter=2000, C=4.0),
 )
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)

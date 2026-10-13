@@ -11,6 +11,7 @@ from fastapi.testclient import TestClient
 
 from app.core.detector import detect_risk
 from app.core.ml_detector import ml_detect
+from app.api.routes import ML_THRESHOLD
 from app.core.sanitization import normalize
 from app.main import app
 
@@ -29,7 +30,7 @@ for i, r in eval_df.iterrows():
         "source": r.source,
         "rules_only": bool(rules["categories"]),
         "ml_only": ml["label"] != "safe",
-        "hybrid": max(rules["prompt_risk_score"], ml["risk"] if ml["risk"] > 0.8 else 0.0) > 0.5,
+        "hybrid": max(rules["prompt_risk_score"], ml["risk"] if ml["risk"] > ML_THRESHOLD else 0.0) > 0.5,
         "full_pipeline": response["action"] != "allow",
     })
 
