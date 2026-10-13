@@ -1,18 +1,20 @@
-from pydantic import BaseModel
-from typing import List, Dict, Any, Optional
+from typing import Any
+
+from pydantic import BaseModel, Field
 
 
 class PromptRequest(BaseModel):
-    session_id: str
-    user_id: Optional[str]
-    prompt: str
+    session_id: str = Field(min_length=1, max_length=200)
+    user_id: str | None = None
+    prompt: str = Field(min_length=1, max_length=20_000)
 
 
 class DetectionResult(BaseModel):
-    categories: List[str]
-    keyword_hits: List[str]
+    categories: list[str]
+    keyword_hits: list[str]
     prompt_risk_score: float
     sanitized_prompt: str
+    removed_fragments: list[str] = []
 
 
 class GuardrailResponse(BaseModel):
@@ -22,4 +24,4 @@ class GuardrailResponse(BaseModel):
     detection: DetectionResult
     session_risk_score: float
     history_count: int
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]

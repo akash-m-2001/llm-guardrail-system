@@ -1,5 +1,7 @@
-fastapi
-uvicorn
-pydantic
-scikit-learn
-numpy
+fastapi>=0.110
+uvicorn>=0.29
+pydantic>=2.6
+# Pinned: model.pkl was saved with scikit-learn 1.8.0; pickles are only
+# guaranteed to load correctly with the version that created them.
+scikit-learn==1.8.0
+numpy>=1.26
