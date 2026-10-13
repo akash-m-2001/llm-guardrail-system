@@ -10,8 +10,9 @@ from app.schemas import DetectionResult, GuardrailResponse, PromptRequest
 
 router = APIRouter()
 
-RULE_WEIGHT = 0.5
-ML_WEIGHT = 0.5
+# Chosen with cross-validation on the training data only (training/choose_threshold.py):
+# at 0.8 the model flags ~3% of normal prompts while catching ~70% of attacks.
+ML_THRESHOLD = 0.8
 
 
 @router.get("/health")
@@ -29,10 +30,14 @@ def run_guardrail(payload: PromptRequest):
     ml = ml_detect(text)
 
     # 3. Hybrid score: rules are precise but brittle, ML generalizes but is noisy.
-    final_score = RULE_WEIGHT * rules["prompt_risk_score"] + ML_WEIGHT * ml["risk"]
+        # Either detector can flag on its own: the rules when a pattern matches, the
+    # model only when it's confident. (The old average, 0.5*rules + 0.5*ML > 0.5,
+    # meant the model could never flag anything the rules missed.)
+    ml_confident = ml["risk"] > ML_THRESHOLD
+    final_score = max(rules["prompt_risk_score"], ml["risk"] if ml_confident else 0.0)
 
     categories = list(rules["categories"])
-    if ml["label"] != SAFE and ml["label"] not in categories:
+    if ml_confident and ml["label"] != SAFE and ml["label"] not in categories:
         categories.append(ml["label"])
 
     # 4. Session-level risk: repeated probing raises the bar for later prompts.

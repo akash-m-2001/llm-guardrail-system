@@ -1,0 +1,30 @@
+{
+  "rules_only": {
+    "detection_rate": 0.1,
+    "false_positive_rate": 0.0,
+    "fpr_hard_negatives": 0.0,
+    "injection_detection": 0.14,
+    "harmful_detection": 0.06
+  },
+  "ml_only": {
+    "detection_rate": 0.85,
+    "false_positive_rate": 0.13,
+    "fpr_hard_negatives": 0.34,
+    "injection_detection": 0.89,
+    "harmful_detection": 0.81
+  },
+  "hybrid": {
+    "detection_rate": 0.66,
+    "false_positive_rate": 0.03,
+    "fpr_hard_negatives": 0.06,
+    "injection_detection": 0.73,
+    "harmful_detection": 0.59
+  },
+  "full_pipeline": {
+    "detection_rate": 0.66,
+    "false_positive_rate": 0.03,
+    "fpr_hard_negatives": 0.06,
+    "injection_detection": 0.73,
+    "harmful_detection": 0.59
+  }
+}
